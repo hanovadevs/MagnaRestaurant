@@ -11,8 +11,16 @@ type CartDrawerProps = {
   onClose: () => void;
 };
 
+import { useRouter } from "next/navigation";
+
 const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
+  const router = useRouter();
   const { items, updateQuantity, removeItem, subtotal, itemCount, clearCart } = useCart();
+
+  const handleCheckout = () => {
+    onClose();
+    router.push("/checkout");
+  };
 
   return (
     <AnimatePresence>
@@ -128,11 +136,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                   variant="primary" 
                   size="lg" 
                   className="w-full py-4 text-base flex justify-between items-center"
-                  onClick={() => {
-                    alert("Checkout simulated! Your order will be ready for pickup/delivery in 20-30 minutes.");
-                    clearCart();
-                    onClose();
-                  }}
+                  onClick={handleCheckout}
                 >
                   <span>Checkout Now</span>
                   <ArrowRight className="w-5 h-5" />

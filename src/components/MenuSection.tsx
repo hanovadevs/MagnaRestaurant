@@ -15,12 +15,15 @@ const categories = [
   { id: "desserts", label: "Desserts", icon: <IceCream className="w-5 h-5" /> },
 ];
 
+import { useRouter } from "next/navigation";
+
 const MenuSection = () => {
+  const router = useRouter();
   const [activeCategory, setActiveCategory] = useState("dinner");
   const { addItem } = useCart();
 
   const handleDownloadPDF = () => {
-    window.location.href = "/menu-print";
+    router.push("/menu-print");
   };
 
   return (
