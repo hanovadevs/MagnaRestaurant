@@ -2,5 +2,71 @@ import Link from "next/link";
 import { cafe } from "@/data/cafe";
 import Arrow from "./Arrow";
 export default function Footer() {
-  return <footer className="site-footer"><div className="container"><div className="footer-top"><div><p className="eyebrow">Coffee & good company</p><h2>See you at <em>Raum.</em></h2><Link href="/contact" className="text-link">There’s a seat with your name on it <Arrow diagonal /></Link></div><div className="footer-info"><div><h3>Come on over</h3><p>{cafe.address}<br />{cafe.city}</p><p>{cafe.hours}</p></div><div><h3>Stay a little longer</h3><Link href="/about">Our story</Link><Link href="/menu">The menu</Link><Link href="/contact#reserve">Book a table</Link><Link href="/contact">Get in touch</Link></div><div><h3>Find inspiration</h3><a href="https://www.instagram.com/" target="_blank" rel="noreferrer">Instagram <Arrow diagonal /></a><a href="https://www.facebook.com/" target="_blank" rel="noreferrer">Facebook <Arrow diagonal /></a><a href="https://www.pinterest.com/" target="_blank" rel="noreferrer">Pinterest <Arrow diagonal /></a><span className="fine-print">Demo social links</span></div></div></div><div className="footer-bottom"><Link href="/" className="footer-wordmark" aria-label="Raum home">Raum</Link><p>© {new Date().getFullYear()} Raum. A café concept demo.</p><p>Take your time. Enjoy the little things.</p></div></div></footer>;
+  return (
+    <footer className="site-footer">
+      <div className="container">
+        <div className="footer-top">
+          <div>
+            <p className="eyebrow">Coffee & good company</p>
+            <h2>
+              See you at <em>Raum.</em>
+            </h2>
+            <Link href="/contact" className="text-link">
+              There’s a seat with your name on it <Arrow diagonal />
+            </Link>
+          </div>
+          <div className="footer-info">
+            <div>
+              <h3>Come on over</h3>
+              <p>
+                {cafe.address}
+                <br />
+                {cafe.city}
+              </p>
+              <p>{cafe.hours}</p>
+            </div>
+            <div>
+              <h3>Stay a little longer</h3>
+              <Link href="/about">Our story</Link>
+              <Link href="/menu">The menu</Link>
+              <Link href="/contact#reserve">Book a table</Link>
+              <Link href="/contact">Get in touch</Link>
+            </div>
+            <div>
+              <h3>Find inspiration</h3>
+              <a
+                href="https://www.instagram.com/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Instagram <Arrow diagonal />
+              </a>
+              <a
+                href="https://www.facebook.com/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Facebook <Arrow diagonal />
+              </a>
+              <a
+                href="https://www.pinterest.com/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Pinterest <Arrow diagonal />
+              </a>
+              <span className="fine-print">Demo social links</span>
+            </div>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <Link href="/" className="footer-wordmark" aria-label="Raum home">
+            Raum
+          </Link>
+          <p>© {new Date().getFullYear()} Raum. A café concept demo.</p>
+          <p>Take your time. Enjoy the little things.</p>
+        </div>
+      </div>
+    </footer>
+  );
 }

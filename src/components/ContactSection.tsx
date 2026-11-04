@@ -4,5 +4,128 @@ import { useSubmission } from "./useSubmission";
 import Arrow from "./Arrow";
 export default function ContactSection() {
   const { submit, busy, status, error } = useSubmission("/api/contact");
-  return <section className="section contact-section"><div className="container contact-grid"><div className="contact-copy"><p className="eyebrow">A hello goes a long way</p><h2>Good conversations<br /><em>start here.</em></h2><p>Have a question, a gathering in mind, or just something nice to say? We’d love to hear it.</p><div className="contact-details"><div><h3>Find our little corner</h3><p>{cafe.address}<br />{cafe.city}</p><a href={cafe.maps} target="_blank" rel="noreferrer" className="text-link">Explore the neighborhood <Arrow diagonal /></a></div><div><h3>Drop us a hello</h3><a href={`mailto:${cafe.email}`}>{cafe.email}</a><a href={cafe.phoneHref}>{cafe.phone}</a></div><div><h3>There’s always time</h3><p>{cafe.hours}</p></div></div><p className="fine-print">Demo address and contact details. This is a café concept, not a real venue.</p></div><form className="cafe-form contact-form" onSubmit={submit} aria-label="Contact form"><h3>Leave a little note.</h3><div className="form-row"><label htmlFor="contact-name">Your name<input id="contact-name" name="name" required minLength={2} maxLength={80} autoComplete="name" placeholder="Alex Nguyen" /></label><label htmlFor="contact-email">Email address<input id="contact-email" name="email" type="email" required maxLength={254} autoComplete="email" placeholder="alex@example.com" /></label></div><label htmlFor="contact-subject">What’s on your mind?<select id="contact-subject" name="subject" defaultValue="Just saying hello"><option>Just saying hello</option><option>A question about the menu</option><option>A gathering or celebration</option><option>Something else</option></select></label><label htmlFor="contact-message">Your message<textarea id="contact-message" name="message" required minLength={10} maxLength={2000} rows={5} placeholder="Tell us a little about it…" /></label><button className="button button--primary" type="submit" disabled={busy}>{busy ? "Saving your note…" : "Send your note"}<Arrow /></button><p className="fine-print">Try the demo with sample details. No email is sent.</p><p role={error ? "alert" : "status"} className={`form-status ${error ? "form-status--error" : ""}`}>{status}</p></form></div></section>;
+  return (
+    <section className="section contact-section">
+      <div className="container contact-grid">
+        <div className="contact-copy">
+          <p className="eyebrow">A hello goes a long way</p>
+          <h2>
+            Good conversations
+            <br />
+            <em>start here.</em>
+          </h2>
+          <p>
+            Have a question, a gathering in mind, or just something nice to say?
+            We’d love to hear it.
+          </p>
+          <div className="contact-details">
+            <div>
+              <h3>Find our little corner</h3>
+              <p>
+                {cafe.address}
+                <br />
+                {cafe.city}
+              </p>
+              <a
+                href={cafe.maps}
+                target="_blank"
+                rel="noreferrer"
+                className="text-link"
+              >
+                Explore the neighborhood <Arrow diagonal />
+              </a>
+            </div>
+            <div>
+              <h3>Drop us a hello</h3>
+              <a href={`mailto:${cafe.email}`}>{cafe.email}</a>
+              <a href={cafe.phoneHref}>{cafe.phone}</a>
+            </div>
+            <div>
+              <h3>There’s always time</h3>
+              <p>{cafe.hours}</p>
+            </div>
+          </div>
+          <p className="fine-print">
+            Demo address and contact details. This is a café concept, not a real
+            venue.
+          </p>
+        </div>
+        <form
+          className="cafe-form contact-form"
+          onSubmit={submit}
+          aria-label="Contact form"
+        >
+          <h3>Leave a little note.</h3>
+          <div className="form-row">
+            <label htmlFor="contact-name">
+              Your name
+              <input
+                id="contact-name"
+                name="name"
+                required
+                minLength={2}
+                maxLength={80}
+                autoComplete="name"
+                placeholder="Alex Nguyen"
+              />
+            </label>
+            <label htmlFor="contact-email">
+              Email address
+              <input
+                id="contact-email"
+                name="email"
+                type="email"
+                required
+                maxLength={254}
+                autoComplete="email"
+                placeholder="alex@example.com"
+              />
+            </label>
+          </div>
+          <label htmlFor="contact-subject">
+            What’s on your mind?
+            <select
+              id="contact-subject"
+              name="subject"
+              defaultValue="Just saying hello"
+            >
+              <option>Just saying hello</option>
+              <option>A question about the menu</option>
+              <option>A gathering or celebration</option>
+              <option>Something else</option>
+            </select>
+          </label>
+          <label htmlFor="contact-message">
+            Your message
+            <textarea
+              id="contact-message"
+              name="message"
+              required
+              minLength={10}
+              maxLength={2000}
+              rows={5}
+              placeholder="Tell us a little about it…"
+            />
+          </label>
+          <button
+            className="button button--primary"
+            type="submit"
+            disabled={busy}
+          >
+            {busy ? "Saving your note…" : "Send your note"}
+            <Arrow />
+          </button>
+          <p className="fine-print">
+            Try the demo with sample details. No email is sent.
+          </p>
+          <p
+            role={error ? "alert" : "status"}
+            className={`form-status ${error ? "form-status--error" : ""}`}
+          >
+            {status}
+          </p>
+        </form>
+      </div>
+    </section>
+  );
 }
