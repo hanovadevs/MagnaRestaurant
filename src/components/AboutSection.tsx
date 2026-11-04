@@ -13,6 +13,7 @@ export default function AboutSection({ full = false }: { full?: boolean }) {
             src="/images/cafe-interior.jpg"
             alt="A welcoming café filled with warm light and places to linger"
             className="about-photo"
+            eager={full}
           />
           <CafeImage
             src="/images/coffee-closeup.jpg"

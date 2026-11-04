@@ -9,7 +9,8 @@ export type MenuItem = {
 export const formatPrice = (amount: number) =>
   `${new Intl.NumberFormat("en-US").format(amount)} ₫`;
 export const menuCategories = [
-  { id: "drinks", label: "Coffee & drinks" },
+  { id: "drinks", label: "Coffee & Espresso" },
+  { id: "cold", label: "Cold Drinks" },
   { id: "breakfast", label: "Breakfast" },
   { id: "lunch", label: "Lunch" },
   { id: "dinner", label: "Dinner" },
@@ -35,7 +36,7 @@ export const menuData: Record<MenuCategory, MenuItem[]> = {
     },
     {
       id: 103,
-      name: "Latte",
+      name: "Café Latte",
       description: "Espresso with silky milk. Hot or iced.",
       price_numerical: 70000,
       group: "Espresso coffee",
@@ -49,7 +50,7 @@ export const menuData: Record<MenuCategory, MenuItem[]> = {
     },
     {
       id: 105,
-      name: "Cafe Mocha",
+      name: "Mocha",
       description: "Coffee, chocolate, and milk. Hot or iced.",
       price_numerical: 79000,
       group: "Espresso coffee",
@@ -61,6 +62,15 @@ export const menuData: Record<MenuCategory, MenuItem[]> = {
       price_numerical: 85000,
       group: "Espresso coffee",
     },
+    {
+      id: 116,
+      name: "Cappuccino",
+      description: "A double espresso with steamed milk and soft, airy foam.",
+      price_numerical: 70000,
+      group: "Espresso coffee",
+    },
+  ],
+  cold: [
     {
       id: 107,
       name: "Coconut Coffee",

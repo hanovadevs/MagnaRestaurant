@@ -11,6 +11,7 @@ import {
 } from "@/data/menu";
 import { useCart } from "@/context/CartContext";
 import Arrow from "./Arrow";
+import MenuItemCard from "./MenuItemCard";
 export default function MenuSection({ full = false }: { full?: boolean }) {
   const [category, setCategory] = useState<MenuCategory>("drinks");
   const [notice, setNotice] = useState("");
@@ -48,7 +49,34 @@ export default function MenuSection({ full = false }: { full?: boolean }) {
             </Link>
           </div>
         </div>
-        <div className="menu-tabs" role="tablist" aria-label="Menu categories">
+        <p className="menu-detail-hint">
+          Take a closer look at any item for ingredients and serving notes.
+        </p>
+        <div
+          className="menu-tabs"
+          role="tablist"
+          aria-label="Menu categories"
+          onKeyDown={(event) => {
+            const current = menuCategories.findIndex(
+              (entry) => entry.id === category,
+            );
+            let next = current;
+            if (event.key === "ArrowRight")
+              next = (current + 1) % menuCategories.length;
+            else if (event.key === "ArrowLeft")
+              next =
+                (current - 1 + menuCategories.length) % menuCategories.length;
+            else if (event.key === "Home") next = 0;
+            else if (event.key === "End") next = menuCategories.length - 1;
+            else return;
+            event.preventDefault();
+            setCategory(menuCategories[next].id);
+            setNotice("");
+            event.currentTarget
+              .querySelectorAll<HTMLButtonElement>("[role=tab]")
+              [next]?.focus();
+          }}
+        >
           {menuCategories.map((entry) => (
             <button
               type="button"
@@ -57,6 +85,7 @@ export default function MenuSection({ full = false }: { full?: boolean }) {
               role="tab"
               aria-selected={category === entry.id}
               aria-controls="menu-panel"
+              tabIndex={category === entry.id ? 0 : -1}
               onClick={() => {
                 setCategory(entry.id);
                 setNotice("");
@@ -71,7 +100,7 @@ export default function MenuSection({ full = false }: { full?: boolean }) {
           id="menu-panel"
           role="tabpanel"
           aria-labelledby={`tab-${category}`}
-          className="menu-groups"
+          className={`menu-groups ${groups.length === 1 ? "menu-groups--single" : ""}`}
           key={category}
         >
           {groups.map((group) => (
@@ -81,32 +110,21 @@ export default function MenuSection({ full = false }: { full?: boolean }) {
                 {selected
                   .filter((item) => (item.group || label) === group)
                   .map((item) => (
-                    <article className="menu-item" key={item.id}>
-                      <div className="menu-item-copy">
-                        <h4>{item.name}</h4>
-                        <p>{item.description}</p>
-                      </div>
-                      <div className="menu-item-action">
-                        <span>{formatPrice(item.price_numerical)}</span>
-                        <button
-                          type="button"
-                          disabled={
-                            (items.find((entry) => entry.id === item.id)
-                              ?.quantity || 0) >= 20
-                          }
-                          aria-label={`Add ${item.name} to your café list`}
-                          onClick={() => add(item)}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </article>
+                    <MenuItemCard
+                      key={item.id}
+                      item={item}
+                      onAdd={add}
+                      atLimit={
+                        (items.find((entry) => entry.id === item.id)
+                          ?.quantity || 0) >= 20
+                      }
+                    />
                   ))}
               </div>
             </div>
           ))}
         </div>
-        {category === "drinks" ? (
+        {category === "drinks" || category === "cold" ? (
           <div className="coffee-notes">
             <div>
               <h3>Make it yours.</h3>
@@ -144,7 +162,7 @@ export default function MenuSection({ full = false }: { full?: boolean }) {
             </Link>
           ) : (
             <span className="fine-print">
-              Food prices are for this café concept demo.
+              Food and Cappuccino prices are demo values.
             </span>
           )}
         </div>
