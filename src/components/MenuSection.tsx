@@ -1,124 +1,175 @@
 "use client";
-
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { menuData } from "@/data/menu";
-import { Coffee, Pizza, UtensilsCrossed, Wine, IceCream, Star, Plus } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import {
+  coffeeExtras,
+  formatPrice,
+  menuCategories,
+  menuData,
+  type MenuCategory,
+  type MenuItem,
+} from "@/data/menu";
 import { useCart } from "@/context/CartContext";
-import Button from "./Button";
-
-const categories = [
-  { id: "breakfast", label: "Breakfast", icon: <Coffee className="w-5 h-5" /> },
-  { id: "lunch", label: "Lunch", icon: <Pizza className="w-5 h-5" /> },
-  { id: "dinner", label: "Dinner", icon: <UtensilsCrossed className="w-5 h-5" /> },
-  { id: "drinks", label: "Drinks", icon: <Wine className="w-5 h-5" /> },
-  { id: "desserts", label: "Desserts", icon: <IceCream className="w-5 h-5" /> },
-];
-
-import { useRouter } from "next/navigation";
-
-const MenuSection = () => {
-  const router = useRouter();
-  const [activeCategory, setActiveCategory] = useState("dinner");
-  const { addItem } = useCart();
-
-  const handleDownloadPDF = () => {
-    router.push("/menu-print");
-  };
-
+import Arrow from "./Arrow";
+import MenuItemCard from "./MenuItemCard";
+export default function MenuSection({ full = false }: { full?: boolean }) {
+  const [category, setCategory] = useState<MenuCategory>("drinks");
+  const [notice, setNotice] = useState("");
+  const { addItem, items } = useCart();
+  const selected = menuData[category];
+  const label = menuCategories.find((entry) => entry.id === category)!.label;
+  const groups = [...new Set(selected.map((item) => item.group || label))];
+  function add(item: MenuItem) {
+    addItem(item);
+    setNotice(`${item.name} added to your café list.`);
+  }
   return (
-    <section id="menu" className="py-24 bg-white relative">
-      {/* Decorative background */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-3xl -z-0" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-0" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
-          <span className="text-secondary font-sans font-bold uppercase tracking-[0.2em] text-xs mb-4 block">
-            The Flavors of Italy
-          </span>
-          <h2 className="text-4xl md:text-5xl font-elegant text-wood-dark mb-4">
-            Our Digital <span className="text-primary italic">Menu</span>
-          </h2>
-          <p className="max-w-xl mx-auto text-wood-dark/60">
-            From sunrise to sunset, we serve authentic dishes prepared with 
-            fresh ingredients and traditional techniques. Click <Plus className="inline w-3 h-3" /> to add to order.
-          </p>
+    <section
+      id="menu"
+      className={`section menu-section ${full ? "menu-section--full" : ""}`}
+    >
+      <div className="container">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Something for every mood</p>
+            <h2>
+              A good day starts
+              <br />
+              <em>with the menu.</em>
+            </h2>
+          </div>
+          <div className="menu-intro">
+            <p>
+              House-blended coffee, easy breakfasts,
+              <br />
+              and all the little things worth staying for.
+            </p>
+            <Link href="/menu-print" className="text-link">
+              Print or save the menu <Arrow diagonal />
+            </Link>
+          </div>
         </div>
-
-        {/* Category Tabs */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {categories.map((cat) => (
+        <p className="menu-detail-hint">
+          Take a closer look at any item for ingredients and serving notes.
+        </p>
+        <div
+          className="menu-tabs"
+          role="tablist"
+          aria-label="Menu categories"
+          onKeyDown={(event) => {
+            const current = menuCategories.findIndex(
+              (entry) => entry.id === category,
+            );
+            let next = current;
+            if (event.key === "ArrowRight")
+              next = (current + 1) % menuCategories.length;
+            else if (event.key === "ArrowLeft")
+              next =
+                (current - 1 + menuCategories.length) % menuCategories.length;
+            else if (event.key === "Home") next = 0;
+            else if (event.key === "End") next = menuCategories.length - 1;
+            else return;
+            event.preventDefault();
+            setCategory(menuCategories[next].id);
+            setNotice("");
+            event.currentTarget
+              .querySelectorAll<HTMLButtonElement>("[role=tab]")
+              [next]?.focus();
+          }}
+        >
+          {menuCategories.map((entry) => (
             <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`flex items-center space-x-2 px-6 py-3 rounded-full font-bold transition-all duration-300 ${
-                activeCategory === cat.id
-                  ? "bg-primary text-white shadow-xl scale-105"
-                  : "bg-stone-100 text-stone-800 hover:bg-stone-200"
-              }`}
+              type="button"
+              key={entry.id}
+              id={`tab-${entry.id}`}
+              role="tab"
+              aria-selected={category === entry.id}
+              aria-controls="menu-panel"
+              tabIndex={category === entry.id ? 0 : -1}
+              onClick={() => {
+                setCategory(entry.id);
+                setNotice("");
+              }}
+              className={category === entry.id ? "active" : ""}
             >
-              {cat.icon}
-              <span className="uppercase text-xs tracking-widest">{cat.label}</span>
+              {entry.label}
             </button>
           ))}
         </div>
-
-        {/* Menu Items Grid */}
-        <div className="min-h-[400px]">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeCategory}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-8"
-            >
-              {menuData[activeCategory].map((item: any) => (
-                <div 
-                  key={item.id} 
-                  className="bg-milky/50 p-6 rounded-3xl border border-transparent hover:border-gold/30 hover:shadow-2xl transition-all duration-300 group relative"
+        <div
+          id="menu-panel"
+          role="tabpanel"
+          aria-labelledby={`tab-${category}`}
+          className={`menu-groups ${groups.length === 1 ? "menu-groups--single" : ""}`}
+          key={category}
+        >
+          {groups.map((group) => (
+            <div className="menu-group" key={group}>
+              <h3>{group}</h3>
+              <div className="menu-entries">
+                {selected
+                  .filter((item) => (item.group || label) === group)
+                  .map((item) => (
+                    <MenuItemCard
+                      key={item.id}
+                      item={item}
+                      onAdd={add}
+                      atLimit={
+                        (items.find((entry) => entry.id === item.id)
+                          ?.quantity || 0) >= 20
+                      }
+                    />
+                  ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        {category === "drinks" || category === "cold" ? (
+          <div className="coffee-notes">
+            <div>
+              <h3>Make it yours.</h3>
+              <p>
+                Two espresso shots per coffee drink, unless mentioned otherwise.
+                Specialty coffees are served iced.
+              </p>
+            </div>
+            <div className="extras">
+              {coffeeExtras.map((extra) => (
+                <button
+                  key={extra.id}
+                  onClick={() => add(extra)}
+                  disabled={
+                    (items.find((entry) => entry.id === extra.id)?.quantity ||
+                      0) >= 20
+                  }
+                  aria-label={`Add ${extra.name}`}
                 >
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="flex items-center space-x-2">
-                      <h3 className="text-xl font-elegant font-bold text-wood-dark group-hover:text-primary transition-colors">
-                        {item.name}
-                      </h3>
-                      {item.popular && (
-                        <span className="bg-secondary/20 text-secondary text-[10px] uppercase font-bold px-2 py-0.5 rounded-full flex items-center">
-                          <Star className="w-3 h-3 mr-1 fill-secondary" />
-                          Popular
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center space-x-4">
-                      <span className="text-lg font-elegant font-bold text-primary">{item.price}</span>
-                      <button 
-                        onClick={() => addItem(item)}
-                        className="bg-white p-2 rounded-full shadow-md text-primary hover:bg-primary hover:text-white transition-all transform hover:scale-110 active:scale-95"
-                      >
-                        <Plus className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                  <p className="text-wood-dark/60 text-sm italic font-sans pr-12">
-                    {item.description}
-                  </p>
-                </div>
+                  <span>{extra.name}</span>
+                  <strong>+{formatPrice(extra.price_numerical)}</strong>
+                </button>
               ))}
-            </motion.div>
-          </AnimatePresence>
+            </div>
+          </div>
+        ) : null}
+        <div className="menu-bottom">
+          <p className="fine-print">
+            All prices in VND, subject to 8% VAT. Please tell us about any
+            allergies.
+          </p>
+          {!full ? (
+            <Link href="/menu" className="text-link">
+              See the full menu <Arrow />
+            </Link>
+          ) : (
+            <span className="fine-print">
+              Food and Cappuccino prices are demo values.
+            </span>
+          )}
         </div>
-
-        <div className="text-center mt-16">
-          <Button variant="outline" size="lg" onClick={handleDownloadPDF}>
-            Download Full PDF Menu
-          </Button>
-        </div>
+        <p role="status" aria-live="polite" className="selection-notice">
+          {notice}
+        </p>
       </div>
     </section>
   );
-};
-
-export default MenuSection;
+}

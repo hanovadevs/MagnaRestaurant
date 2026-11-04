@@ -1,18 +1,19 @@
 import type { NextConfig } from "next";
 
-const isGithubActions = process.env.GITHUB_ACTIONS === 'true';
-
 const nextConfig: NextConfig = {
-  // Static export is required for GitHub Pages but optional for Vercel/Local
-  output: isGithubActions ? 'export' : undefined,
-  
-  // Set the base path ONLY for GitHub Pages deployments (e.g., /MagnaRestaurant)
-  // This ensures Local Dev and Vercel remain at the root (/)
-  basePath: isGithubActions ? '/MagnaRestaurant' : '',
-  
+  output: process.env.NEXT_PUBLIC_STATIC_DEMO === "true" ? "export" : undefined,
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
   trailingSlash: true,
+  turbopack: { root: process.env.RAUM_BUILD_ROOT || process.cwd() },
+  devIndicators: false,
   images: {
-    unoptimized: true,
+    unoptimized: process.env.NEXT_PUBLIC_STATIC_DEMO === "true",
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
   },
 };
 

@@ -1,36 +1,30 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
-
-const playfair = Playfair_Display({
-  variable: "--font-serif",
-  subsets: ["latin"],
-});
-
-const inter = Inter({
-  variable: "--font-sans",
-  subsets: ["latin"],
-});
-
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 export const metadata: Metadata = {
-  title: "Magna Restaurant | Authentic Italian Cuisine in Flushing, NY",
-  description: "Experience the heart of Italy at Magna Restaurant & Bar. Serving breakfast, lunch, and dinner in a cozy, contemporary atmosphere in Queens.",
+  title: {
+    default: "Raum Café — Coffee & Good Company",
+    template: "%s | Raum Café",
+  },
+  description:
+    "A little pause in the city. Explore Raum’s house-blended coffees, comforting breakfasts, and easy lunches. A café concept website.",
+  icons: { icon: "/icon.svg" },
 };
-
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      className={`${playfair.variable} ${inter.variable} h-full antialiased scroll-smooth`}
-    >
-      <body className="min-h-full flex flex-col font-sans antialiased">
+    <html lang="en" data-scroll-behavior="smooth">
+      <body>
         <CartProvider>
-          {children}
+          <a className="skip-link" href="#main-content">
+            Skip to content
+          </a>
+          <Navbar />
+          <main id="main-content">{children}</main>
+          <Footer />
         </CartProvider>
       </body>
     </html>
