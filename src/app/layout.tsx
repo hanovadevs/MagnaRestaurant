@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   },
   description:
     "A little pause in the city. Explore Raum’s house-blended coffees, comforting breakfasts, and easy lunches. A café concept website.",
-  icons: { icon: "/icon.svg" },
+  icons: { icon: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/icon.svg` },
 };
 export default function RootLayout({
   children,

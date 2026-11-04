@@ -28,16 +28,19 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
           cache: "npm"
       - name: Setup Pages
-        uses: actions/configure-pages@v4
-        # with:
-        #   static_site_generator: next
+        uses: actions/configure-pages@v5
       - name: Install dependencies
         run: npm ci
-      - name: Build with Next.js
-        run: npm run build
+      - name: Verify café demo
+        run: |
+          npm test
+          npm run lint
+          npm run build
+      - name: Build GitHub Pages demo
+        run: npm run build:pages
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

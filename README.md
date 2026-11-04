@@ -70,6 +70,14 @@ The UI reports success only after persistence and preserves entered data on erro
 
 Before production, replace demo details/prices, connect a durable store and notification/booking provider, and add retention and abuse controls. Local JSONL storage is suitable for this local demo, not ephemeral serverless hosting.
 
+## GitHub Pages
+
+The main-branch workflow verifies the server build and then runs `npm run build:pages`. This creates a disposable source copy under `.local`, omits its API routes, and exports the demo to `out/` with `/MagnaRestaurant` as its base path. Original API source and the normal local server remain intact. Images, links, and the icon include the Pages prefix.
+
+On Pages, demo contact/reservation submissions are validated and saved in browser storage (at most 50 per form), with the same honest success feedback; no unavailable server endpoint is called. Clear the site's browser storage to remove those samples. Local server mode continues to use the JSONL API handlers described above. For a custom root deployment, run the Pages build with `NEXT_PUBLIC_BASE_PATH` set to an empty string.
+
+The older `/checkout` and `/order-tracking` URLs remain available as helpful demo pages. They no longer simulate payment, courier activity, or live orders.
+
 ## Assets and checks
 
 Photos are stored in `public/images`; sources are in `public/images/credits.md`. Image generation failed at the service, so shipped photography is sourced from Unsplash.
