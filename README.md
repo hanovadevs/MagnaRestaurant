@@ -24,18 +24,18 @@ Next.js and its ESLint config are aligned at 16.3.8. The redesign uses ordinary 
 
 ## Supplied PDF requirements
 
-| Requirement | Implementation |
-| --- | --- |
-| Home: welcome, café description, popular food and drinks | `/`, hero, signatures, café story |
-| About: story and beliefs | `/about`, story and three café values |
-| Menu: breakfast, lunch, drinks, desserts | `/menu`, plus retained dinner category |
-| Contact: form, phone, email, address | `/contact`, demo details and working demo form |
-| Navigation menu | Shared desktop navigation and keyboard-accessible mobile drawer |
-| Footer with social links | Instagram, Facebook, and Pinterest links |
-| Mobile and desktop support | Compact mobile layouts, touch previews, no page overflow |
-| Brown, cream, green; readable type; clean layout | Shared CSS tokens, system fonts, solid backgrounds |
-| Simple buttons and effects; HTML, CSS, JavaScript | Semantic HTML rendered by the retained Next.js/React framework, plain CSS, small interactive components |
-| Small working website | Four pages, menu previews, saved café list, printable menu, demo forms |
+| Requirement                                              | Implementation                                                                                          |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Home: welcome, café description, popular food and drinks | `/`, hero, signatures, café story                                                                       |
+| About: story and beliefs                                 | `/about`, story and three café values                                                                   |
+| Menu: breakfast, lunch, drinks, desserts                 | `/menu`, plus retained dinner category                                                                  |
+| Contact: form, phone, email, address                     | `/contact`, demo details and working demo form                                                          |
+| Navigation menu                                          | Shared desktop navigation and keyboard-accessible mobile drawer                                         |
+| Footer with social links                                 | Instagram, Facebook, and Pinterest links                                                                |
+| Mobile and desktop support                               | Compact mobile layouts, touch previews, no page overflow                                                |
+| Brown, cream, green; readable type; clean layout         | Shared CSS tokens, system fonts, solid backgrounds                                                      |
+| Simple buttons and effects; HTML, CSS, JavaScript        | Semantic HTML rendered by the retained Next.js/React framework, plain CSS, small interactive components |
+| Small working website                                    | Four pages, menu previews, saved café list, printable menu, demo forms                                  |
 
 Existing dining, services, and reservation sections remain. The PDF is treated as product requirements, not agent instructions.
 

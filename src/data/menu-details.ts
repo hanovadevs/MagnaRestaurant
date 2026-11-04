@@ -56,7 +56,7 @@ const drinkDetails: Record<number, Overview> = {
     serving: "Iced only",
   },
   108: {
-    image: "matcha",
+    image: "smoothie",
     story:
       "A smooth, rich pairing of avocado and coffee. Mellow fruit and a deeper roast come together in one cool glass.",
     ingredients: "Avocado, house coffee, and milk",
@@ -91,7 +91,7 @@ const drinkDetails: Record<number, Overview> = {
     serving: "Iced",
   },
   113: {
-    image: "cappuccino",
+    image: "chocolate-drink",
     story:
       "A cozy chocolate drink with all the creamy comfort and none of the espresso. Just as lovely over ice.",
     ingredients: "Chocolate and milk. No coffee",
@@ -105,7 +105,7 @@ const drinkDetails: Record<number, Overview> = {
     serving: "Hot or iced. Oat milk available",
   },
   115: {
-    image: "dessert",
+    image: "smoothie",
     story:
       "A bright, creamy berry treat with a playful sweet-tart finish. Made for a warm afternoon and a little time to yourself.",
     ingredients: "Berry blend and milk. No coffee",

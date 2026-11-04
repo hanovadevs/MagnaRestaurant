@@ -214,7 +214,7 @@ em {
   color: white;
   padding: 12px 20px;
 }
-.skip-link:focus {
+.skip-link:focus-visible {
   top: 12px;
 }
 .site-header {
