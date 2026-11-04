@@ -1,4 +1,12 @@
-import { cp, mkdir, rm, symlink, unlink } from "node:fs/promises";
+import {
+  cp,
+  mkdir,
+  readdir,
+  rm,
+  symlink,
+  unlink,
+  writeFile,
+} from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 
@@ -12,6 +20,29 @@ if (
   throw new Error("Invalid static build paths.");
 await mkdir(stage, { recursive: true });
 let linked = false;
+async function filesInside(directory) {
+  const files = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const file = path.join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...(await filesInside(file)));
+    else files.push(file);
+  }
+  return files;
+}
+async function addSegmentAliases(directory) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const child = path.join(directory, entry.name);
+    if (entry.name.startsWith("__next.")) {
+      // The router requests dotted segment names; a static host cannot rewrite
+      // those requests to the nested files emitted by the exporter.
+      for (const file of await filesInside(child)) {
+        const name = path.relative(child, file).split(path.sep).join(".");
+        await cp(file, path.join(directory, `${entry.name}.${name}`));
+      }
+    } else await addSegmentAliases(child);
+  }
+}
 try {
   for (const name of [
     "src",
@@ -56,6 +87,8 @@ try {
     throw new Error(`Pages build failed (${result.status}).`);
   await rm(output, { recursive: true, force: true });
   await cp(path.join(stage, "out"), output, { recursive: true });
+  await addSegmentAliases(output);
+  await writeFile(path.join(output, ".nojekyll"), "");
   console.log(
     `Static demo ready in out${basePath ? ` for ${basePath}/` : "/"}`,
   );
