@@ -1,5 +1,6 @@
 "use client";
 import { useState, type FormEvent } from "react";
+import { validateSubmission } from "@/lib/validation";
 export function useSubmission(endpoint: string) {
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState("");
@@ -13,11 +14,47 @@ export function useSubmission(endpoint: string) {
     setStatus("");
     setError(false);
     try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      if (process.env.NEXT_PUBLIC_STATIC_DEMO === "true") {
+        const kind = endpoint.endsWith("reservation")
+          ? "reservation"
+          : "contact";
+        const valid = validateSubmission(kind, data);
+        const key = `raum-demo-${kind}-v1`;
+        let previous: unknown;
+        try {
+          previous = JSON.parse(localStorage.getItem(key) || "[]");
+        } catch {
+          previous = [];
+        }
+        const records = Array.isArray(previous) ? previous.slice(-49) : [];
+        records.push({
+          id: crypto.randomUUID(),
+          createdAt: new Date().toISOString(),
+          ...valid,
+        });
+        try {
+          localStorage.setItem(key, JSON.stringify(records));
+        } catch {
+          throw new Error(
+            "Your browser couldn’t save this demo request. Please enable browser storage and try again.",
+          );
+        }
+        setStatus(
+          kind === "contact"
+            ? "Your demo message has been saved. No email has been sent."
+            : "Your demo reservation request has been saved. No table has been booked.",
+        );
+        form.reset();
+        return;
+      }
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_PATH || ""}${endpoint}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        },
+      );
       const result = await response.json();
       if (!response.ok || !result.success)
         throw new Error(result.message || "Please try again.");

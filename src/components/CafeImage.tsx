@@ -15,7 +15,7 @@ export default function CafeImage({
   return (
     <div className={`cafe-image ${className}`}>
       <Image
-        src={src}
+        src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}${src}`}
         alt={alt}
         fill
         sizes={sizes}
