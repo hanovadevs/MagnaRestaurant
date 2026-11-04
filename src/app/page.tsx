@@ -1,21 +1,7 @@
-import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import SignatureSection from "@/components/SignatureSection";
 import AboutSection from "@/components/AboutSection";
 import MenuSection from "@/components/MenuSection";
 import ServicesSection from "@/components/ServicesSection";
 import ReservationForm from "@/components/ReservationForm";
-import Footer from "@/components/Footer";
-
-export default function Home() {
-  return (
-    <main className="min-h-screen">
-      <Navbar />
-      <Hero />
-      <AboutSection />
-      <MenuSection />
-      <ServicesSection />
-      <ReservationForm />
-      <Footer />
-    </main>
-  );
-}
+export default function Home() { return <><Hero /><SignatureSection /><AboutSection /><MenuSection /><ServicesSection /><ReservationForm /></>; }
